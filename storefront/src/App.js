@@ -1,27 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
 
 import {connect} from 'react-redux';
+import { selectCategory } from './components/storefront.js';
 
 function App(props) {
 
   return (
     <div className="App">
-      <Header />
-      <Categories />
-      <Footer />
+      {props.categories.map(category => (
+        <button
+          onClick={() => props.selectCategory(category.normalizedName)}>
+          Select {category.displayName}
+        </button>
+      ))}
     </div>
   );
 }
 
 const mapStateToProps = state => {
   return {
-    votes: state.votes
+    categories: state.storefront.categories,
+    products: state.storefront.products,
+    activeCategory: state.storefront.activeCategory
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  increment: (name) => dispatch({type: 'ADD_VOTE', payload: name})
+  selectCategory: (category) => dispatch(selectCategory(category))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
